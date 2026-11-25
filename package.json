@@ -8,7 +8,7 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "desktop": "electron .",
-    "dist:win": "electron-builder --win nsis portable"
+    "dist:win": "electron-builder --win nsis portable --publish never"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
@@ -48,5 +48,7 @@
     "portable": {
       "artifactName": "ModForge-AI-Portable-${version}-${arch}.${ext}"
     }
-  }
+  },
+  "description": "Create and build Minecraft mods with ModForge AI.",
+  "author": "ModForge AI"
 }
