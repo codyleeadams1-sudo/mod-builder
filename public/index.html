@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ModForge AI — Build Minecraft Mods</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">✳</span><span>modforge<span class="brand-ai">.ai</span></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <a class="nav active" href="#"><span>✦</span> Mod builder</a>
+    <a class="nav" href="#how"><span>▤</span> How it works</a>
+    <div class="side-bottom"><div class="status-dot"></div><span>Local build environment</span><span class="tiny-pill">BETA</span></div>
+  </aside>
+  <main>
+    <header><div class="crumb">WORKSPACE <span>/</span> <b>NEW PROJECT</b></div><div class="header-right"><span class="secure">● Private workspace</span><div class="avatar">M</div></div></header>
+    <section class="hero">
+      <div class="eyebrow"><span class="spark">✦</span> YOUR IDEA, PLAYABLE</div>
+      <h1>Dream it.<br><em>Mod it.</em></h1>
+      <p>Describe the Minecraft mod in your head. Your local AI writes the code, creates pixel-art assets, and helps compile it into a ready-to-use JAR — without paid AI APIs.</p>
+    </section>
+    <section class="builder">
+      <div class="section-head"><div><span class="step">01</span><h2>What are we building?</h2></div><span class="muted">START WITH AN IDEA</span></div>
+      <label class="field-label">MOD NAME <span>OPTIONAL</span></label>
+      <input id="modName" class="text-input" placeholder="e.g. Skybound Movement" maxlength="40">
+      <label class="field-label category-label">CHOOSE A CATEGORY</label>
+      <div class="categories" id="categories">
+        <button class="category selected" data-category="movement"><span>↟</span>Movement</button>
+        <button class="category" data-category="tool"><span>⚒</span>Tools</button>
+        <button class="category" data-category="item"><span>◇</span>Items</button>
+        <button class="category" data-category="weapon"><span>⚔</span>Weapons</button>
+        <button class="category" data-category="armor"><span>⬡</span>Armor</button>
+        <button class="category" data-category="block"><span>▦</span>Blocks</button>
+        <button class="category" data-category="food"><span>♨</span>Food</button>
+        <button class="category" data-category="mob"><span>♟</span>Mobs</button>
+        <button class="category" data-category="world generation"><span>⌁</span>World gen</button>
+        <button class="category" data-category="magic"><span>✧</span>Magic</button>
+        <button class="category" data-category="utility"><span>⚙</span>Utility</button>
+        <button class="category" data-category="other"><span>＋</span>Other</button>
+      </div>
+      <label class="field-label prompt-label">DESCRIBE YOUR MOD <span>THE MORE DETAIL, THE BETTER</span></label>
+      <div class="prompt-wrap"><textarea id="prompt" rows="5" placeholder="Example: Create a double jump mod. When the player jumps and is in the air, pressing the jump key again gives them one extra jump. Add a subtle particle effect, a short cooldown, and make it work in survival and creative mode..."></textarea><div class="prompt-foot"><span>✦ Local AI turns your description into a Fabric mod project</span><span id="charCount">0 / 2000</span></div></div>
+      <div class="section-head settings-head"><div><span class="step">02</span><h2>Build settings</h2></div><span class="muted">YOUR TARGET VERSION</span></div>
+      <div class="settings-grid">
+        <div><label class="field-label">MOD LOADER</label><div class="select-wrap"><select id="loader"><option value="Fabric">Fabric</option><option value="Forge" disabled>Forge — coming soon</option><option value="NeoForge" disabled>NeoForge — coming soon</option></select><span>⌄</span></div></div>
+        <div><label class="field-label">MINECRAFT VERSION</label><div class="select-wrap"><select id="mcVersion"><option>1.21.1</option><option>1.21</option><option selected>1.20.1</option><option>1.19.4</option><option>1.19.2</option><option>1.18.2</option></select><span>⌄</span></div></div>
+        <div><label class="field-label">JAVA VERSION</label><div class="select-wrap"><select id="javaVersion"><option>21</option><option selected>17</option><option>16</option><option>8</option></select><span>⌄</span></div></div>
+      </div>
+      <label class="toggle-row"><span class="toggle-icon">▧</span><span class="toggle-copy"><b>Generate textures when needed</b><small>AI will include texture prompts and asset references for custom items, blocks, and mobs.</small></span><input id="textures" type="checkbox" checked><span class="toggle"></span></label>
+      <button id="generate" class="generate-btn"><span>✦</span> Generate my mod <span class="arrow">→</span></button>
+      <p class="fineprint">Generated source code is yours to inspect. Compilation happens on your server.</p>
+    </section>
+    <section id="result" class="result hidden">
+      <div class="result-head"><div><span class="step">03</span><h2>Your mod project</h2></div><span id="buildState" class="state">SOURCE GENERATED</span></div>
+      <p id="projectDescription" class="result-desc"></p>
+      <div id="notes" class="notes"></div>
+      <div class="file-title">GENERATED FILES</div><div id="fileList" class="file-list"></div>
+      <div class="build-row"><div><b>Ready to compile?</b><small>Builds the project into a Minecraft mod .jar file.</small></div><button id="compile" class="compile-btn">Compile JAR ↗</button></div>
+      <div id="buildMessage" class="build-message hidden"></div>
+      <a id="download" class="download hidden" href="#">↓ Download mod JAR</a>
+    </section>
+    <section id="how" class="how"><div class="how-title">FROM PROMPT TO MOD</div><div class="how-grid"><div><span>01</span><b>Describe</b><p>Tell the AI what you want your mod to do.</p></div><div><span>02</span><b>Generate</b><p>Get a complete Java project and asset plan.</p></div><div><span>03</span><b>Compile</b><p>Build the source into a JAR you can install.</p></div></div></section>
+    <footer>MODFORGE AI <span>•</span> BUILT FOR CREATORS, NOT JUST CODERS</footer>
+  </main>
+</div>
+<div id="toast" role="status"></div>
+<script src="/app.js"></script>
+</body></html>
