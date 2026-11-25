@@ -37,13 +37,13 @@ This build step must run on Windows (or a configured Windows cross-build machine
 
 ## Install the browser extension (Chrome / Edge)
 
-1. Start ModForge AI on `http://127.0.0.1:3000` (the desktop app starts the same local service).
+1. Install and launch the ModForge AI Windows app once. The installer registers the `modforge://` link handler.
 2. Open `chrome://extensions` (or `edge://extensions`).
 3. Turn on **Developer mode**.
 4. Choose **Load unpacked** and select this project's `browser-extension` folder.
 5. Use the extension popup to send an idea, or select text on a webpage, right-click, and choose **Send selection to ModForge AI**.
 
-The extension hands the selected text to the local app through a URL; it does not read pages in the background.
+The extension opens a `modforge://` link, which launches the installed desktop app and transfers the idea into its prompt. It does not read pages in the background. If Windows asks which app should open the link, choose ModForge AI.
 
 ## Building Minecraft mods
 
@@ -69,7 +69,7 @@ This repository includes `.github/workflows/build-windows.yml`.
 6. Extract that artifact ZIP. It contains the Windows installer and portable `.exe`.
 
 Pushing commits to `main`/`master` also starts a build. To publish a GitHub Release,
-create and push a version tag such as `v2.0.0`.
+The workflow only builds and uploads artifacts; it does not attempt to publish a GitHub Release or require a `GH_TOKEN`.
 
 GitHub Actions builds the Windows EXE; it does not install Ollama or download the AI model
 into the EXE. Users install Ollama separately and run `ollama pull qwen2.5-coder:7b`

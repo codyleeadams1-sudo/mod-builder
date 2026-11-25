@@ -49,6 +49,6 @@
       "artifactName": "ModForge-AI-Portable-${version}-${arch}.${ext}"
     }
   },
-  "description": "Create and build Minecraft mods with ModForge AI.",
+  "description": "Local-first Minecraft mod creator powered by Ollama.",
   "author": "ModForge AI"
 }

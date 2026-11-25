@@ -10,8 +10,7 @@ import { createWriteStream } from "node:fs";
 dotenv.config();
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = process.env.PORT || 3000;
-const BUILD_ROOT = path.join(__dirname, "builds");
+let BUILD_ROOT = path.join(__dirname, "builds");
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5-coder:7b";
 app.use(express.json({ limit: "2mb" }));
@@ -133,4 +132,23 @@ app.get("/api/download/:id/:file", async (req, res) => {
     res.download(full);
   } catch { res.status(404).json({ error: "JAR not found." }); }
 });
-app.listen(PORT, () => console.log(`ModForge AI running at http://localhost:${PORT}`));
+export async function startServer(options = {}) {
+  BUILD_ROOT = options.buildRoot || BUILD_ROOT;
+  await fs.mkdir(BUILD_ROOT, { recursive: true });
+  const port = options.port ?? Number(process.env.PORT || 3000);
+  const server = await new Promise((resolve, reject) => {
+    const instance = app.listen(port, "127.0.0.1", () => resolve(instance));
+    instance.once("error", reject);
+  });
+  const address = server.address();
+  console.log(`ModForge AI running at http://127.0.0.1:${address.port}`);
+  return { server, port: address.port };
+}
+
+// Keep the same server usable from the desktop app and from `npm start`.
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  startServer().catch(error => {
+    console.error("Could not start ModForge AI:", error);
+    process.exitCode = 1;
+  });
+}

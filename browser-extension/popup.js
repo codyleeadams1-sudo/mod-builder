@@ -1,7 +1,10 @@
-document.getElementById('send').addEventListener('click', async () => {
+document.getElementById('send').addEventListener('click', () => {
   const idea = document.getElementById('idea').value.trim();
-  if (!idea) return;
-  const url = 'http://127.0.0.1:3000/?idea=' + encodeURIComponent(idea) + '&category=other';
-  await chrome.tabs.create({ url });
-  window.close();
+  if (!idea) {
+    document.getElementById('idea').focus();
+    return;
+  }
+  const params = new URLSearchParams({ idea: idea.slice(0, 2000), category: 'other' });
+  window.location.href = `modforge://create?${params.toString()}`;
+  document.getElementById('status').textContent = 'Launching ModForge AI…';
 });
